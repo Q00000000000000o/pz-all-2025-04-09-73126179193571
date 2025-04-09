@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .login-container {
+      font-size: 10px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+       box-sizing: border-box; 
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+       box-sizing: border-box; 
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>盾构推进姿态和管片拼装指导系统</h2>
+    <input type="email" id="username" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password (8 chars)" maxlength="8" required>
+    <button onclick="handleLogin()">登录</button>
+    <div id="error"></div>
+  </div>
+
+  <script type="module">
+    import { backend } from 'declarations/backend';
+
+    window.handleLogin = async () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('error');
+
+      if (password.length !== 8) {
+        errorDiv.textContent = 'Password must be 8 characters';
+        return;
+      }
+
+      try {
+        const result = await backend.login(username, password);
+        console.log('return:', result);
+        if (result === 'https://pz1-all-beta-1-zres.4everland.app/') {
+          window.location.href = result; // 验证通过，跳转
+        } else {
+          errorDiv.textContent = 'WRONG USER'; // 验证失败
+        }
+      } catch (error) {
+        errorDiv.textContent = 'Error: ' + error.message;
+      }
+    };
+  </script>
+</body>
+</html>
